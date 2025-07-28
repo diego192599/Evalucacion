@@ -1,3 +1,5 @@
+from enum import nonmember
+
 empledos={}
 class Empleado:
     def __init__(self,codigo,nombre,departamento,trabajo,):
@@ -55,4 +57,27 @@ class Evaluacion(Empleado):
         else:
             print("No se ha encontrado el empledo")
 
+class Contacto(Empleado):
+    def __init__(self,telefono,correo):
+        self.telefono=telefono
+        self.correo=correo
+    def ingreso_datos(self):
 
+while True:
+    print("\n==MENU==")
+    print("1. Ingrese datos del empleado")
+    print("2. Mostrar Informacion")
+    print("3. Evaluacion")
+    print("4. Salir")
+    opcion=int(input("Seleccione una opcion: "))
+    if opcion==1:
+        print("Bienvido ingrese los requisitos pedidos")
+    elif opcion==2:
+        print("---Mostrar Informacion---")
+    elif opcion==3:
+        print("---Evaluacion de Empleado---")
+    elif opcion==4:
+        print("!Hasta pronto¡")
+        break
+    else:
+        print("La opcion seleccionada no se encuentra disponible....Intente nuevamente")
