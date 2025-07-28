@@ -1,9 +1,9 @@
 empleados = {}
 
 class Contacto:
-    def __init__(self, telefono, correo):
-        self.telefono = telefono
-        self.correo = correo
+    def __init__(self, datos):
+        self.telefono = datos["telefono"]
+        self.correo = datos["correo"]
 
     def mostrar_contacto(self):
         print(f"Teléfono: {self.telefono}")
@@ -11,47 +11,25 @@ class Contacto:
 
 
 class Empleado:
-    def __init__(self, codigo, nombre, departamento, trabajo):
-        self.codigo = codigo
-        self.nombre = nombre
-        self.departamento = departamento
-        self.trabajo = trabajo
+    def __init__(self, datos):
+        self.nombre = datos["nombre"]
+        self.departamento = datos["departamento"]
+        self.trabajo = datos["trabajo"]
 
-    def mostrar_informacion(self):
+    def mostrar_info(self):
         print(f"\nNombre: {self.nombre}")
         print(f"Departamento: {self.departamento}")
         print(f"Años trabajados: {self.trabajo}")
 
 
-class EmpleadoConContacto(Empleado):
-    def __init__(self, codigo, nombre, departamento, trabajo, contacto):
-        super().__init__(codigo, nombre, departamento, trabajo)
-        self.contacto = contacto
-
-    def mostrar_informacion(self):
-        super().mostrar_informacion()
-        self.contacto.mostrar_contacto()
-
-
 class Evaluacion:
-    def promediar_puntaje(self):
-        codigo = input("Ingrese el código del empleado a evaluar: ")
-        if codigo in empleados:
-            print("Empleado encontrado... Evalue al empleado")
-            puntualidad = int(input("Puntaje de puntualidad (0-10): "))
-            trabajo_equipo = int(input("Puntaje de trabajo en equipo (0-10): "))
-            productividad = int(input("Puntaje de productividad (0-10): "))
+    def __init__(self, datos):
+        self.puntualidad = datos.get("puntualidad", 0)
+        self.trabajo_equipo = datos.get("trabajo_equipo", 0)
+        self.productividad = datos.get("productividad", 0)
 
-            suma = puntualidad + trabajo_equipo + productividad
-            promedio = suma / 3
-            empleado = empleados[codigo]
-
-            if promedio >= 7:
-                print(f"\nEl empleado {empleado.nombre} tiene un desempeño SATISFACTORIO. Promedio: {promedio:.2f}")
-            else:
-                print(f"\nEl empleado {empleado.nombre} puede mejorar su desempeño. Promedio: {promedio:.2f}")
-        else:
-            print("No se encontró al empleado.")
+    def calcular_promedio(self):
+        return (self.puntualidad + self.trabajo_equipo + self.productividad) / 3
 
 
 def ingresar_datos():
@@ -70,22 +48,64 @@ def ingresar_datos():
         telefono = input("Teléfono de contacto: ")
         correo = input("Correo electrónico: ")
 
-        contacto = Contacto(telefono, correo)
-        empleado = EmpleadoConContacto(codigo, nombre, departamento, trabajo, contacto)
-        empleados[codigo] = empleado
+        empleados[codigo] = {
+            "info": {
+                "nombre": nombre,
+                "departamento": departamento,
+                "trabajo": trabajo
+            },
+            "contacto": {
+                "telefono": telefono,
+                "correo": correo
+            },
+            "evaluacion": {}
+        }
         print("Datos guardados correctamente.")
 
 
 def mostrar_todos():
     if empleados:
         print("\n--- Información de todos los empleados ---")
-        for empleado in empleados.values():
-            empleado.mostrar_informacion()
+        for codigo, datos in empleados.items():
+            emp = Empleado(datos["info"])
+            emp.mostrar_info()
+
+            cont = Contacto(datos["contacto"])
+            cont.mostrar_contacto()
+
+            if datos["evaluacion"]:
+                evalua = Evaluacion(datos["evaluacion"])
+                promedio = evalua.calcular_promedio()
+                print(f"Promedio de evaluación: {promedio:.2f}")
     else:
         print("No hay empleados registrados.")
 
 
-evaluador = Evaluacion()
+def evaluar_empleado():
+    codigo = input("Ingrese el código del empleado a evaluar: ")
+    if codigo in empleados:
+        print("Empleado encontrado... Evalue al empleado")
+        puntualidad = int(input("Puntaje de puntualidad (0-10): "))
+        trabajo_equipo = int(input("Puntaje de trabajo en equipo (0-10): "))
+        productividad = int(input("Puntaje de productividad (0-10): "))
+
+        empleados[codigo]["evaluacion"] = {
+            "puntualidad": puntualidad,
+            "trabajo_equipo": trabajo_equipo,
+            "productividad": productividad
+        }
+
+        evaluacion = Evaluacion(empleados[codigo]["evaluacion"])
+        promedio = evaluacion.calcular_promedio()
+        nombre = empleados[codigo]["info"]["nombre"]
+
+        if promedio >= 7:
+            print(f"\nEl empleado {nombre} tiene un desempeño SATISFACTORIO. Promedio: {promedio:.2f}")
+        else:
+            print(f"\nEl empleado {nombre} puede mejorar su desempeño. Promedio: {promedio:.2f}")
+    else:
+        print("No se encontró al empleado.")
+
 
 while True:
     print("\n== MENU ==")
@@ -101,7 +121,7 @@ while True:
     elif opcion == "2":
         mostrar_todos()
     elif opcion == "3":
-        evaluador.promediar_puntaje()
+        evaluar_empleado()
     elif opcion == "4":
         print("¡Hasta pronto!")
         break
