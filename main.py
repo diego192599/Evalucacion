@@ -1,6 +1,6 @@
 empledos={}
 class Empleado:
-    def __init__(self,codigo,nombre,departamento,trabajo):
+    def __init__(self,codigo,nombre,departamento,trabajo,):
         self.codigo=codigo
         self.nombre=nombre
         self.departamento=departamento
@@ -30,3 +30,29 @@ class Empleado:
         print(f"Nombre: {self.nombre}")
         print(f"Departamento: {self.departamento}")
         print(f"Años trabajados son: {self.trabajo}")
+
+
+class Evaluacion(Empleado):
+    def __init__(self, puntaje):
+        self.puntaje = puntaje
+
+    def Promediode_puntuaje(self, puntuaje):
+        buscar = input("Ingrese el codigo del empleado a puntuar: ")
+        if buscar in empledos:
+            print("Empleado encontrado...Evalue a empleado")
+            puntuaje = int(
+                input("Ingrese la cantidad de evaluaciones tendra el empleado (la cantida de ingresos son 3)"))
+            for i in range(puntuaje):
+                puntialidad = int(input("Ingrese el puntuaje de la puntualidad del empleado (0-10): "))
+                trabajo_equipo = int(input("Ingrese el puntaje del empleado cuando trabaja en equipo(0-10): "))
+                productividad = int(input("Ingrese el puntuaje de que tan productivo es el empleado(0-10): "))
+            suma = puntialidad + trabajo_equipo + productividad
+            promedio = suma / 3
+            if promedio >= 7:
+                print(f"\n El empleado con el nombre: {self.nombre} su desempeño es Satisfactorio")
+            else:
+                print(f"EL empleado puede mejorar su desempeño laboral")
+        else:
+            print("No se ha encontrado el empledo")
+
+
