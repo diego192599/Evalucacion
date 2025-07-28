@@ -1,5 +1,14 @@
 empleados = {}
 
+class Contacto:
+    def __init__(self, telefono, correo):
+        self.telefono = telefono
+        self.correo = correo
+
+    def mostrar_contacto(self):
+        print(f"Teléfono: {self.telefono}")
+        print(f"Correo: {self.correo}")
+
 
 class Empleado:
     def __init__(self, codigo, nombre, departamento, trabajo):
@@ -12,6 +21,16 @@ class Empleado:
         print(f"\nNombre: {self.nombre}")
         print(f"Departamento: {self.departamento}")
         print(f"Años trabajados: {self.trabajo}")
+
+
+class EmpleadoConContacto(Empleado):
+    def __init__(self, codigo, nombre, departamento, trabajo, contacto):
+        super().__init__(codigo, nombre, departamento, trabajo)
+        self.contacto = contacto
+
+    def mostrar_informacion(self):
+        super().mostrar_informacion()
+        self.contacto.mostrar_contacto()
 
 
 class Evaluacion:
@@ -28,9 +47,9 @@ class Evaluacion:
             empleado = empleados[codigo]
 
             if promedio >= 7:
-                print(f"\nEl empleado {empleado.nombre} tiene un desempeño SATISFACTORIO.")
+                print(f"\nEl empleado {empleado.nombre} tiene un desempeño SATISFACTORIO. Promedio: {promedio:.2f}")
             else:
-                print(f"\nEl empleado {empleado.nombre} puede mejorar su desempeño.")
+                print(f"\nEl empleado {empleado.nombre} puede mejorar su desempeño. Promedio: {promedio:.2f}")
         else:
             print("No se encontró al empleado.")
 
@@ -43,11 +62,18 @@ def ingresar_datos():
         nombre = input("Nombre: ")
         departamento = input("Departamento: ")
         trabajo = int(input("Años trabajados: "))
+
         if trabajo <= 0:
             print("Los años trabajados no son válidos.")
-        else:
-            empleados[codigo] = Empleado(codigo, nombre, departamento, trabajo)
-            print("Datos guardados correctamente.")
+            continue
+
+        telefono = input("Teléfono de contacto: ")
+        correo = input("Correo electrónico: ")
+
+        contacto = Contacto(telefono, correo)
+        empleado = EmpleadoConContacto(codigo, nombre, departamento, trabajo, contacto)
+        empleados[codigo] = empleado
+        print("Datos guardados correctamente.")
 
 
 def mostrar_todos():
