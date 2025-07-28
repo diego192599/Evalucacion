@@ -1,5 +1,6 @@
 empleados = {}
 
+
 class Empleado:
     def __init__(self, codigo, nombre, departamento, trabajo):
         self.codigo = codigo
@@ -14,16 +15,13 @@ class Empleado:
 
 
 class Evaluacion:
-    def __init__(self):
-        pass
-
     def promediar_puntaje(self):
         codigo = input("Ingrese el código del empleado a evaluar: ")
         if codigo in empleados:
             print("Empleado encontrado... Evalue al empleado")
-            puntualidad = int(input("Ingrese el puntaje de puntualidad (0-10): "))
-            trabajo_equipo = int(input("Ingrese el puntaje de trabajo en equipo (0-10): "))
-            productividad = int(input("Ingrese el puntaje de productividad (0-10): "))
+            puntualidad = int(input("Puntaje de puntualidad (0-10): "))
+            trabajo_equipo = int(input("Puntaje de trabajo en equipo (0-10): "))
+            productividad = int(input("Puntaje de productividad (0-10): "))
 
             suma = puntualidad + trabajo_equipo + productividad
             promedio = suma / 3
